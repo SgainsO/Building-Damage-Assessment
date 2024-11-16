@@ -40,7 +40,7 @@ class SideModel:
         if len(results) == 0:
             return 'inconclusive'
         else:
-            return self.findDamageWithinBuilding(self.model(image))
+            return self.findDamageWithinBuilding(self.model(image, verbose=False))
 
         
     def getArea(self, xyxy):
@@ -64,7 +64,7 @@ class SideModel:
             print("did not exist")
             intersection_area = 0
 
-        print(intersection_area)        
+    #    print(intersection_area)        
         return intersection_area 
     
     def isSafeValue(self, val):     ##Both These Values are Undamged
@@ -101,7 +101,6 @@ class SideModel:
                         foundRoof = True
 
         areaAfterDamage = buildingArea 
-        print("test")
         for r in results:                                               # Selects all the holes within said building file
             for box in r.boxes:
                 label_id = box.cls.item()
@@ -124,17 +123,26 @@ class SideModel:
                     area=damageTypes[i].area,
                     confidence=damageTypes[i].confidence  # confidence is not used in the current implementation
                 )
-       
-        
-        print("Stuff")
-        print(self.estimator.estimate_repair_cost(damageTypes))
-        print("Luif")
-        return  
+        return [self.estimator.estimate_repair_cost(damageTypes), severity]
+    def RunMultipleTests(self, imagesToTest):
+        priceRange = [0,0]
+        for image in imagesToTest:
+            self.model(image)
+            prices, sev = self.findPercentDestroyed(image)
+            low, high= prices
 
+            low = round(low, 2)
+            high = round(high, 2)
+ 
+            print(f"rebuilding {image}: "+ str(low) + " - " + str(high))
+            print(f"The severity to rebuild this building would be {sev}")
+            priceRange[0] += low
+            priceRange[1] += high
+        return priceRange
 
 
 test = SideModel('best.pt')
 
+test.testModel(['14.png', 'build.jpg', 'destroyed.jpg'])
 
-print(test.findPercentDestroyed('14.png'))
-test.testModel('14.png')
+#print("Range of the total cost to rebuild this area: " + str(test.RunMultipleTests(['14.png', 'build.jpg', 'destroyed.jpg'])))

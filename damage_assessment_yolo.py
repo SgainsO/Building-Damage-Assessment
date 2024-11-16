@@ -64,6 +64,7 @@ class BuildingDamageEstimator:
                 total_costs[severity][0] += min_cost
                 total_costs[severity][1] += max_cost
 
+        return (total_costs[severity][0], total_costs[severity][1])   
         return {k: tuple(v) for k, v in total_costs.items()}
 
 
