@@ -12,5 +12,5 @@
 ### Installation/Run Reminders
 * It is reccomended you run the program in a virtual enviornment, but this is optional
 * PIL, Torch, and Ultralytics must all be installed
-* We did not include our dataset on this github, so you must provide your own, matching the format in the YAML file created in the code
+* We did not include our dataset on this github, so you must provide your own, matching the format in the YAML file created in train.py
 * python3 est.py runs the program, make sure the files you want to check are hardcoded in line 146
