@@ -3,8 +3,8 @@
 # Welcome to Our Project!
 
 ## Our Motivation
-* When disastor strikes, it is a costly process to rebuild. Our project is an attempt to introduce a method of how Data science can be used to speed up and reduce the cost of damage analysis process
+* When disaster strikes, assessing and rebuilding is a costly, time-consuming process. Our project demonstrates how data science can streamline damage analysis, reducing both costs and recovery time.
 
 ### Links
 * [Powerpoint with more info on this project](https://docs.google.com/presentation/d/1BkbNGrVA0agTMpkpehzaJqENou5NLx1ZeVcW2eblpRU/edit?usp=sharing)
-  * Model demo on page 8 
+  * Yolo Side Damage Model demo on page 8 
