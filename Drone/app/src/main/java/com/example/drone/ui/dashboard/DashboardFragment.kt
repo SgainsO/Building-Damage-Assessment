@@ -2,6 +2,7 @@ package com.example.drone.ui.dashboard
 
 import android.app.Dialog
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,13 +10,16 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.DialogFragment
+import android.widget.Toast;
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
 import com.example.drone.DashboardAlert
 import com.example.drone.R
 import com.example.drone.databinding.FragmentDashboardBinding
 
-class DashboardFragment : Fragment(), DashboardAlert.NoticeDialogListener {
+class DashboardFragment : Fragment() {
 
     private var _binding: FragmentDashboardBinding? = null
 
@@ -24,9 +28,6 @@ class DashboardFragment : Fragment(), DashboardAlert.NoticeDialogListener {
     private val binding get() = _binding!!
 
     val imageView = view?.findViewById<ImageView>(R.id.ImageHold)
-
-    var xPx = 0;
-    var yPx = 0;
 
     private lateinit var dashboardViewModel: DashboardViewModel
 
@@ -53,27 +54,13 @@ class DashboardFragment : Fragment(), DashboardAlert.NoticeDialogListener {
 
 
         binding.ImageHold.setOnClickListener{
-            xPx = it.x.toInt()
-            yPx = it.y.toInt()
-            val dialog = DashboardAlert()
-            dialog.show(parentFragmentManager, "DashboardAlert")
+            dashboardViewModel.SaveClicked(it.x, it.y)
+            val alert = DashboardAlert()
+            alert.show(parentFragmentManager, "Dash Alert")
         }
 
     }
 
-    override fun onDialogPositiveClick(dialog: DialogFragment) {
-        val eLat = dialog.view?.findViewById<EditText?>(R.id.editLatitude);
-        val eLong = dialog.view?.findViewById<EditText?>(R.id.editLongitude)
-        if(eLat != null && eLong != null)
-        {
-            dashboardViewModel.SaveCoordinates(xPx, yPx,
-                eLat.text.toString().toDouble(), eLong.text.toString().toDouble())
-        }
-    }
-
-    override fun onDialogNegativeClick(dialog: DialogFragment) {
-        // User taps the dialog's negative button.
-    }
 
     override fun onDestroyView() {
         super.onDestroyView()

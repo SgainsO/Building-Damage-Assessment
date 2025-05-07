@@ -5,52 +5,47 @@ import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
-import android.widget.Button
-import androidx.appcompat.app.AppCompatActivity
+import android.util.Log
+import android.widget.EditText
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.ViewModelProvider
+import com.example.drone.ui.dashboard.DashboardViewModel
 
 class DashboardAlert : DialogFragment() {
 
-    internal lateinit var listener: NoticeDialogListener
-
-    // The activity that creates an instance of this dialog fragment must
-    // implement this interface to receive event callbacks. Each method passes
-    // the DialogFragment in case the host needs to query it.
-    interface NoticeDialogListener {
-        fun onDialogPositiveClick(dialog: DialogFragment)
-        fun onDialogNegativeClick(dialog: DialogFragment)
-    }
+    private lateinit var dashboardViewModel: DashboardViewModel
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity?.let {
-            val builder = AlertDialog.Builder(it)
+            val builder = AlertDialog.Builder(requireActivity())
             val inflater = requireActivity().layoutInflater
+            dashboardViewModel = ViewModelProvider(this).get(DashboardViewModel::class.java)
 
             builder.setView(inflater.inflate(R.layout.layout_enter_chords, null))
                 // Add action buttons.
                 .setPositiveButton("Enter",
                     DialogInterface.OnClickListener { dialog, id ->
-                        listener.onDialogPositiveClick(this)
+
+                        val dialogView = inflater.inflate(R.layout.layout_enter_chords, null)
+                        val lat = dialogView?.findViewById<EditText>(R.id.editLatitude)
+                        val long = dialogView?.findViewById<EditText>(R.id.editLongitude)
+
+                        Log.d("CHECK", "$lat, $long")
+
+                        if (lat != null && long != null) {
+                            dashboardViewModel.SaveChords(
+                                lat?.text.toString().toFloat(),
+                                long?.text.toString().toFloat()
+                            )
+                        }
                     })
                 .setNegativeButton("Exit",
                     DialogInterface.OnClickListener { dialog, id ->
-                        listener.onDialogNegativeClick(this)
+                        Log.d("Negative", "Negative registered")
                     })
             builder.create()
         } ?: throw IllegalStateException("Activity cannot be null")
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        // Verify that the host activity implements the callback interface.
-        try {
-            // Instantiate the NoticeDialogListener so you can send events to
-            // the host.
-            listener = context as NoticeDialogListener
-        } catch (e: ClassCastException) {
-            // The activity doesn't implement the interface. Throw exception.
-            throw ClassCastException((context.toString() +
-                    " must implement NoticeDialogListener"))
-        }
-    }
+
 }

@@ -1,5 +1,7 @@
 package com.example.drone.ui.dashboard
 
+import android.util.Log
+import androidx.constraintlayout.motion.widget.Debug
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,11 +11,24 @@ class DashboardViewModel : ViewModel() {
     private val _text = MutableLiveData<String>().apply {
         value = "This is dashboard Fragment"
     }
+
+    private val LocationData = mutableMapOf("imageChord" to listOf(0f,0f), "chord" to listOf(0f,0f))
+
     val text: LiveData<String> = _text
 
-    fun SaveCoordinates (x_clicked: Int, y_clicked:Int, long:Double, lat:Double)
+    fun SaveClicked(x_clicked: Float, y_clicked:Float)
     {
-        println("Tap On: ($x_clicked, $y_clicked)")
-        println("Entered Long: ($long, $lat)")
+        Log.d("INPUT","Tap On: ($x_clicked, $y_clicked)")
+        LocationData["imageChord"] = listOf(x_clicked, y_clicked)
     }
+
+    fun SaveChords(x: Float, y : Float)
+    {
+        Log.d("INPUT","Saved Location: ($x, $y)")
+        LocationData["chord"] = listOf(x, y)
+        //TO DO: Send to a database
+    }
+
+
+
 }
