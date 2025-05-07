@@ -19,18 +19,19 @@ class DashboardAlert : DialogFragment() {
         return activity?.let {
             val builder = AlertDialog.Builder(requireActivity())
             val inflater = requireActivity().layoutInflater
+            val dialogView = inflater.inflate(R.layout.layout_enter_chords, null)
+
             dashboardViewModel = ViewModelProvider(this).get(DashboardViewModel::class.java)
 
-            builder.setView(inflater.inflate(R.layout.layout_enter_chords, null))
+            builder.setView(dialogView)
                 // Add action buttons.
                 .setPositiveButton("Enter",
                     DialogInterface.OnClickListener { dialog, id ->
 
-                        val dialogView = inflater.inflate(R.layout.layout_enter_chords, null)
                         val lat = dialogView?.findViewById<EditText>(R.id.editLatitude)
                         val long = dialogView?.findViewById<EditText>(R.id.editLongitude)
 
-                        Log.d("CHECK", "$lat, $long")
+                        Log.d("CHECK", "${lat?.text}, ${long?.text}")
 
                         if (lat != null && long != null) {
                             dashboardViewModel.SaveChords(
