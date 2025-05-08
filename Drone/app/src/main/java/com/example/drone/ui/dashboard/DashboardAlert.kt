@@ -4,9 +4,12 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
+import android.graphics.drawable.Drawable
+import android.graphics.drawable.LayerDrawable
 import android.os.Bundle
 import android.util.Log
 import android.widget.EditText
+import android.widget.ImageView
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.drone.ui.dashboard.DashboardViewModel

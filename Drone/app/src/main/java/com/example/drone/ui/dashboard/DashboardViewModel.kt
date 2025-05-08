@@ -12,7 +12,8 @@ class DashboardViewModel : ViewModel() {
         value = "This is dashboard Fragment"
     }
 
-    private val LocationData = mutableMapOf("imageChord" to listOf(0f,0f), "chord" to listOf(0f,0f))
+    private var LocationData = mutableMapOf("imageChord" to listOf(0f,0f), "chord" to listOf(0f,0f))
+    val LocationInfoArray : MutableList<MutableMap<String, List<Float>>> = mutableListOf()
 
     val text: LiveData<String> = _text
 
@@ -26,6 +27,8 @@ class DashboardViewModel : ViewModel() {
     {
         Log.d("INPUT","Saved Location: ($x, $y)")
         LocationData["chord"] = listOf(x, y)
+        LocationInfoArray.add(LocationData)
+        LocationData = mutableMapOf("imageChord" to listOf(0f,0f), "chord" to listOf(0f,0f))
         //TO DO: Send to a database
     }
 
