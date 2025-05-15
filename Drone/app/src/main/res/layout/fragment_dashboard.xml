@@ -19,8 +19,12 @@
     <ImageView
         android:id="@+id/ImageHold"
         android:layout_width= "512dp"
-        android:layout_height= "512dp"
+        android:layout_height= "400dp"
+        android:maxWidth="512dp"
+        android:scaleType="centerInside"
+        android:maxHeight="512dp"
         android:src="@drawable/forlay"
+        android:adjustViewBounds="true"
         android:contentDescription= "This is where the image will be displayed"
         />
         <LinearLayout

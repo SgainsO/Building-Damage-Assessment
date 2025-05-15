@@ -1,7 +1,11 @@
 package com.example.drone.ui.dashboard
 
+import android.R.attr
 import android.annotation.SuppressLint
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
+import android.graphics.drawable.InsetDrawable
 import android.graphics.drawable.LayerDrawable
 import android.os.Bundle
 import android.util.Log
@@ -9,6 +13,7 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -16,6 +21,9 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.drone.DashboardAlert
 import com.example.drone.R
 import com.example.drone.databinding.FragmentDashboardBinding
+import androidx.core.graphics.drawable.toDrawable
+import androidx.core.graphics.scale
+
 
 class DashboardFragment : Fragment() {
 
@@ -45,7 +53,6 @@ class DashboardFragment : Fragment() {
             textView.text = it
         }
         drawableList.add(binding.ImageHold.drawable)
-
         return root
     }
 
@@ -63,24 +70,31 @@ class DashboardFragment : Fragment() {
 
                     val TopLeftX = binding.ImageHold.x
                     val TopLeftY =  binding.ImageHold.y
+
                     //https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/suspend-cancellable-coroutine.html
 
                     //Need to implement this: https://stackoverflow.com/questions/8909835/android-how-do-i-get-the-x-y-coordinates-within-an-image-imageview
 
-                    val overlay = ContextCompat.getDrawable(requireContext(), R.drawable.check)
-                    val overlayDrawable = overlay?.mutate()
+                    val overlay = ContextCompat.getDrawable(requireContext(), R.drawable.locationicon)
                     Log.d("ARROW", "ASSET POSITION: ${TopLeftX}, ${TopLeftY}" +
                             " MOTION EVENT: ${motionEvent.x}, ${motionEvent.y}")
+                    val overlayDrawable = InsetDrawable(overlay, 2000)
+                    overlayDrawable.setBounds(0,0,
+                        512,512)
 
-                    overlayDrawable?.setBounds(0, 0, 1, 1)
-
+                    //Motion event: 215, 200: top left corner
+                    //Motion event 1200, 213: top right corner
+                    //Motion event  215, 1200 Bottom Left corner
+                    //Motion event  1200, 215 Bottom right corner
+                    val base = ContextCompat.getDrawable(requireContext(), R.drawable.forlay)
+                    base?.setBounds(0,0,512, 512)
                     drawableList.add(overlayDrawable)
-                    val layers = LayerDrawable(arrayOf(binding.ImageHold.drawable, overlayDrawable))
-                    //        layers.setLayerInset(0, 512, 512, 0, 0)
-                    layers.setLayerInset(1, 0,
-                        0, 0, 0)
-
+                    val layers = LayerDrawable(arrayOf(base, overlayDrawable))
+                    // (0,0) is considered the center here
+        //            layers.setLayerSize(1, binding.ImageHold.drawable.intrinsicWidth,
+        //                binding.ImageHold.drawable.intrinsicHeight)
                     binding.ImageHold.setImageDrawable(layers)
+                    binding.ImageHold.scaleType = ImageView.ScaleType.CENTER_INSIDE
                 }
 
 
