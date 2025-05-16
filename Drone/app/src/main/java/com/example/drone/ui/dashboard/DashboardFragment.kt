@@ -15,6 +15,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintSet.Constraint
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -34,6 +36,7 @@ class DashboardFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var dashboardViewModel: DashboardViewModel
+
 
     val drawableList : MutableList<Drawable?> = mutableListOf()
 
@@ -75,15 +78,19 @@ class DashboardFragment : Fragment() {
 
                     //Need to implement this: https://stackoverflow.com/questions/8909835/android-how-do-i-get-the-x-y-coordinates-within-an-image-imageview
 
-                    val overlay = ContextCompat.getDrawable(requireContext(), R.drawable.locationicon)
+                   val overlay = ContextCompat.getDrawable(requireContext(), R.drawable.locationicon)
                     Log.d("ARROW", "ASSET POSITION: ${TopLeftX}, ${TopLeftY}" +
                             " MOTION EVENT: ${motionEvent.x}, ${motionEvent.y}")
+                    createNewIcon(motionEvent.x.toInt() -15, motionEvent.y.toInt() -30) //0,0 top left, 900 950 bottom right
+                   /*
                     val overlayDrawable = InsetDrawable(overlay, 600, 450, 600, 450)
 
                     //Motion event: 215, 200: top left corner
                     //Motion event 1200, 213: top right corner
                     //Motion event  215, 1200 Bottom Left corner
                     //Motion event  1200, 215 Bottom right corner
+
+
                     val base = ContextCompat.getDrawable(requireContext(), R.drawable.forlay)
                     base?.setBounds(0,0,512, 512)
                     drawableList.add(overlayDrawable)
@@ -95,6 +102,7 @@ class DashboardFragment : Fragment() {
          //         layers.setLayerSize(1, 64, 64)
 
                     binding.ImageHold.setImageDrawable(layers)
+           */
                 }
 
 
@@ -105,6 +113,21 @@ class DashboardFragment : Fragment() {
         })
     }
 
+    fun createNewIcon (x : Int, y: Int ) {
+        val overlay = binding.constraintOverlay
+
+        val newIcon = ImageView(requireContext())
+        newIcon.setImageResource(R.drawable.locationicon)
+        newIcon.id = View.generateViewId()
+
+        val params = ConstraintLayout.LayoutParams(128,128)
+        params.startToStart = ConstraintLayout.LayoutParams.PARENT_ID
+        params.topToTop = ConstraintLayout.LayoutParams.PARENT_ID
+        params.marginStart = x  // X offset
+        params.topMargin = y    // Y offset
+
+        overlay.addView(newIcon, params)
+    }
 
     fun SetImageMarkers(LDraw : LayerDrawable) :LayerDrawable{
         val lArr = dashboardViewModel.LocationInfoArray
