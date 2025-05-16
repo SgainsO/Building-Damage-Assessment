@@ -20,7 +20,6 @@ import androidx.constraintlayout.widget.ConstraintSet.Constraint
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.example.drone.DashboardAlert
 import com.example.drone.R
 import com.example.drone.databinding.FragmentDashboardBinding
 import androidx.core.graphics.drawable.toDrawable

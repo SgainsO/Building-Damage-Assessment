@@ -1,4 +1,4 @@
-package com.example.drone
+package com.example.drone.ui.dashboard
 
 import android.app.AlertDialog
 import android.app.Dialog
@@ -12,6 +12,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
+import com.example.drone.R
 import com.example.drone.ui.dashboard.DashboardViewModel
 
 class DashboardAlert : DialogFragment() {

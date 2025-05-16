@@ -1,16 +1,21 @@
 package com.example.drone.ui.dashboard
 
+import android.app.Application
 import android.util.Log
 import androidx.constraintlayout.motion.widget.Debug
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class DashboardViewModel : ViewModel() {
+class DashboardViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _text = MutableLiveData<String>().apply {
         value = "This is dashboard Fragment"
     }
+    val database = databaseAccessor(application)
+    // https://medium.com/@harimoradiya123/getting-started-with-room-database-in-android-using-kotlin-92f84b6a5e6c
+
 
     private var LocationData = mutableMapOf("imageChord" to listOf(0f,0f), "chord" to listOf(0f,0f))
     val LocationInfoArray : MutableList<MutableMap<String, List<Float>>> = mutableListOf()
