@@ -78,9 +78,7 @@ class DashboardFragment : Fragment() {
                     val overlay = ContextCompat.getDrawable(requireContext(), R.drawable.locationicon)
                     Log.d("ARROW", "ASSET POSITION: ${TopLeftX}, ${TopLeftY}" +
                             " MOTION EVENT: ${motionEvent.x}, ${motionEvent.y}")
-                    val overlayDrawable = InsetDrawable(overlay, 2000)
-                    overlayDrawable.setBounds(0,0,
-                        512,512)
+                    val overlayDrawable = InsetDrawable(overlay, 600, 450, 600, 450)
 
                     //Motion event: 215, 200: top left corner
                     //Motion event 1200, 213: top right corner
@@ -91,10 +89,12 @@ class DashboardFragment : Fragment() {
                     drawableList.add(overlayDrawable)
                     val layers = LayerDrawable(arrayOf(base, overlayDrawable))
                     // (0,0) is considered the center here
-        //            layers.setLayerSize(1, binding.ImageHold.drawable.intrinsicWidth,
-        //                binding.ImageHold.drawable.intrinsicHeight)
+               //     layers.setLayerInset(1, -2000, -256, 0,0)
+                    layers.setPadding(0,0,0,0);
+                    layers.setLayerInset(1, -560, 0, 0, 0)
+         //         layers.setLayerSize(1, 64, 64)
+
                     binding.ImageHold.setImageDrawable(layers)
-                    binding.ImageHold.scaleType = ImageView.ScaleType.CENTER_INSIDE
                 }
 
 

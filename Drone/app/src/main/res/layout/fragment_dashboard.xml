@@ -16,17 +16,23 @@
         android:text="@string/Label_Title"
 
         />
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
     <ImageView
         android:id="@+id/ImageHold"
         android:layout_width= "512dp"
         android:layout_height= "400dp"
         android:maxWidth="512dp"
-        android:scaleType="centerInside"
+        android:scaleType="fitXY"
         android:maxHeight="512dp"
         android:src="@drawable/forlay"
         android:adjustViewBounds="true"
+        android:cropToPadding="false"
         android:contentDescription= "This is where the image will be displayed"
         />
+
+    </FrameLayout>
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
