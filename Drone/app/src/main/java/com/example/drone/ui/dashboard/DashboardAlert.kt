@@ -40,8 +40,7 @@ class DashboardAlert : DialogFragment() {
                         if (lat != null && long != null) {
                             dashboardViewModel.SaveChords(
                                 lat?.text.toString().toFloat(),
-                                long?.text.toString().toFloat()
-                            )
+                                long?.text.toString().toFloat())
                         }
                     })
                 .setNegativeButton("Exit",

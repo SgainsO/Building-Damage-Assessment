@@ -46,7 +46,7 @@ class DashboardFragment : Fragment() {
     ): View {
          dashboardViewModel =
             ViewModelProvider(this).get(DashboardViewModel::class.java)
-
+        dashboardViewModel.pictureName = "ToTest"
         _binding = FragmentDashboardBinding.inflate(inflater, container, false)
         val root: View = binding.root
 

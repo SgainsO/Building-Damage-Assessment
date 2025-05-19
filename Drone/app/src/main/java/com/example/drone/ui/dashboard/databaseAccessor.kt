@@ -19,15 +19,14 @@ data class Pictures(
     val picName: String
 )
 
-@Entity(tableName = "SelectedPins")
+@Entity(tableName = "SelectedPins", primaryKeys = ["pinNumber", "picNumber"])
 data class PictureInfo(
-    @PrimaryKey(autoGenerate = true)
-    val pinNumber: Int = 0,
-    val picNumber: Int,
-    val onPicX: Float?,
-    val onPicY: Float?,
-    val chordX: Float?,
-    val chordY: Float?,
+    var pinNumber: Int,
+    var picNumber: Int,
+    var onPicX: Float?,
+    var onPicY: Float?,
+    var chordX: Float?,
+    var chordY: Float?,
 )
 
 @Dao
@@ -45,7 +44,7 @@ interface PicturesDao {
     fun getAll(): LiveData<List<Pictures>>
 
     @Query("SELECT picNumber FROM Pictures WHERE picName = :name")
-    fun getIdForName(name:String) : Int
+    suspend  fun getIdForName(name:String) : Int?
 }
 
 @Dao
@@ -65,9 +64,19 @@ interface SelectedDao {
         WHERE Pictures.picNumber = :picNum
     """)
     fun getAllIconLocations(picNum: Int): LiveData<List<PictureInfo>>
+    @Query("""
+        SELECT * FROM SelectedPins WHERE picNumber = :picNum AND pinNumber = :pinNum
+    """)
+    suspend fun GetPinLocation(picNum: Int, pinNum: Int): PictureInfo
+
+    @Query("""
+        SELECT MAX(pinNumber) FROM SelectedPins WHERE picNumber = :picNum
+    """)
+    suspend fun GetMaxPin(picNum: Int) : Int
+
 }
 
-@Database(entities = [Pictures::class, PictureInfo::class], version = 1)
+@Database(entities = [Pictures::class, PictureInfo::class], version = 2)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun picturesDao(): PicturesDao
     abstract fun selectedDao(): SelectedDao
@@ -81,16 +90,12 @@ abstract class AppDatabase : RoomDatabase() {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     AppDatabase::class.java,
-                    "pictures_database"
-                ).build()
+                    "drone-content"
+                ).fallbackToDestructiveMigration()
+                    .build()
                 INSTANCE = instance
                 instance
             }
         }
     }
-}
-
-public class databaseAccessor(context : Context)
-{
-    val database = AppDatabase.getDatabase(context)
 }
