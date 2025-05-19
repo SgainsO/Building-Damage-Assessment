@@ -15,7 +15,13 @@
         android:id="@+id/navigation_dashboard"
         android:name="com.example.drone.ui.dashboard.DashboardFragment"
         android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        tools:layout="@layout/fragment_dashboard_pictures" />
+
+    <fragment
+        android:id="@+id/navigation_selector"
+        android:name="com.example.drone.ui.dashboard.DashboardPicSelect"
+        android:label="Picture Select"
+        tools:layout="@layout/fragment_dashboard_select" />
 
     <fragment
         android:id="@+id/navigation_notifications"

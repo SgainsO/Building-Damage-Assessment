@@ -2,22 +2,17 @@ package com.example.drone.ui.dashboard
 
 import android.app.AlertDialog
 import android.app.Dialog
-import android.content.Context
 import android.content.DialogInterface
-import android.graphics.drawable.Drawable
-import android.graphics.drawable.LayerDrawable
 import android.os.Bundle
 import android.util.Log
 import android.widget.EditText
-import android.widget.ImageView
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.drone.R
-import com.example.drone.ui.dashboard.DashboardViewModel
 
 class DashboardAlert : DialogFragment() {
 
-    private lateinit var dashboardViewModel: DashboardViewModel
+    private lateinit var dashboardViewModel: DashboardPicSelectViewModel
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity?.let {
@@ -25,7 +20,7 @@ class DashboardAlert : DialogFragment() {
             val inflater = requireActivity().layoutInflater
             val dialogView = inflater.inflate(R.layout.layout_enter_chords, null)
 
-            dashboardViewModel = ViewModelProvider(this).get(DashboardViewModel::class.java)
+            dashboardViewModel = ViewModelProvider(this).get(DashboardPicSelectViewModel::class.java)
 
             builder.setView(dialogView)
                 // Add action buttons.
