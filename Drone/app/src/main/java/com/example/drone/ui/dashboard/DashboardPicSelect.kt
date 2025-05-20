@@ -15,16 +15,21 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.example.drone.R
 import com.example.drone.databinding.FragmentDashboardSelectBinding
+import kotlinx.coroutines.launch
 
 class DashboardPicSelect : Fragment() {
 
     private var _binding: FragmentDashboardSelectBinding? = null
 
+    private var picID : Int = -1
+    private var picRValue: Int = -1
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
+    private val errorImage = R.drawable.error
 
     private lateinit var dashboardViewModel: DashboardPicSelectViewModel
 
@@ -36,16 +41,21 @@ class DashboardPicSelect : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
+
         dashboardViewModel =
             ViewModelProvider(this).get(DashboardPicSelectViewModel::class.java)
         dashboardViewModel.pictureName = "ToTest"
         _binding = FragmentDashboardSelectBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val textView: TextView = binding.textDashboard
-        dashboardViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
-        }
+        picID = arguments?.getInt("imageId") ?: -1
+        picRValue = arguments?.getInt("pictureNumber") ?: errorImage
+
+        dashboardViewModel.editTextReflectTrueName(picID)
+
+
+        binding.ImageHold.setImageResource(picRValue)
         drawableList.add(binding.ImageHold.drawable)
         return root
     }

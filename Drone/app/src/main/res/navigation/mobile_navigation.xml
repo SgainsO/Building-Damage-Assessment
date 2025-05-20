@@ -15,13 +15,26 @@
         android:id="@+id/navigation_dashboard"
         android:name="com.example.drone.ui.dashboard.DashboardFragment"
         android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard_pictures" />
+        tools:layout="@layout/fragment_dashboard_pictures" >
+        <action
+            android:id="@+id/action_navigation_dashboard_to_navigation_selector"
+            app:destination="@id/navigation_selector" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_selector"
         android:name="com.example.drone.ui.dashboard.DashboardPicSelect"
         android:label="Picture Select"
-        tools:layout="@layout/fragment_dashboard_select" />
+        tools:layout="@layout/fragment_dashboard_select" >
+
+        <argument
+            android:name="imageId"
+            app:argType="integer" />
+
+        <action
+            android:id="@+id/action_navigation_selector_to_navigation_dashboard"
+            app:destination="@id/navigation_dashboard" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_notifications"

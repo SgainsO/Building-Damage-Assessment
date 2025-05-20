@@ -44,7 +44,7 @@ class DashboardFragment : Fragment() {
         _binding = FragmentDashboardPicturesBinding.inflate(inflater, container, false)
         val root: View = binding.root
         val dataset = arrayOf(0) // will be empty for trial purposes
-        val adapter = RecycleAdapter(childFragmentManager, dataset)
+        val adapter = RecycleAdapter(this, dataset)
         val recycleView: RecyclerView = binding.ImageViews
 
         recycleView.layoutManager = LinearLayoutManager(requireContext())

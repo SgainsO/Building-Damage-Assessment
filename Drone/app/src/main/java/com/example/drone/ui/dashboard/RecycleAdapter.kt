@@ -8,11 +8,15 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.drone.R
 import android.content.res.Resources
+import android.os.Bundle
 import android.util.Log
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.replace
+import androidx.navigation.Navigation
+import androidx.navigation.findNavController
 
-class RecycleAdapter(private val frag: FragmentManager, private val dataSet: Array<Int>) :
+class RecycleAdapter(private val frag: Fragment, private val dataSet: Array<Int>) :
     RecyclerView.Adapter<RecycleAdapter.ViewHolder>() {
 
     /**
@@ -46,10 +50,13 @@ class RecycleAdapter(private val frag: FragmentManager, private val dataSet: Arr
         viewHolder.imageHolder.setImageResource(R.drawable.oblique_test)
 
         viewHolder.imageHolder.setOnClickListener {
-            frag.commit {
-                replace(R.id.navigation_dashboard, DashboardPicSelect())
-                addToBackStack(null)
+            val bundle = Bundle().apply {
+                putInt("imageId", position)
+                putInt("pictureNumber", R.drawable.oblique_test)
             }
+            frag.requireView().findNavController().navigate(
+                R.id.action_navigation_dashboard_to_navigation_selector,
+                bundle)
         }
 
     }

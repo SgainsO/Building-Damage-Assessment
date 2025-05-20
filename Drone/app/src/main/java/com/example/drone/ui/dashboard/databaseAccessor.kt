@@ -45,6 +45,9 @@ interface PicturesDao {
 
     @Query("SELECT picNumber FROM Pictures WHERE picName = :name")
     suspend  fun getIdForName(name:String) : Int?
+
+    @Query("SELECT picName FROM Pictures WHERE picNumber = :number")
+    suspend fun getNameForId(number: Int) : String?
 }
 
 @Dao

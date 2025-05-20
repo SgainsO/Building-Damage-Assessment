@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 class DashboardPicSelectViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _text = MutableLiveData<String>().apply {
-        value = "This is dashboard Fragment"
+        value = ""
     }
     val database = AppDatabase.getDatabase(application)
 
@@ -23,6 +23,7 @@ class DashboardPicSelectViewModel(application: Application) : AndroidViewModel(a
 
     var currentPinNumber = 0
 
+    val text: LiveData<String> = _text
 
     fun resetPinNumber()
     {
@@ -34,7 +35,6 @@ class DashboardPicSelectViewModel(application: Application) : AndroidViewModel(a
     val LocationInfoArray : MutableList<MutableMap<String, List<Float>>> = mutableListOf()
 
     var pictureName = ""
-    val text: LiveData<String> = _text
 
 
     fun SaveClicked(x_clicked: Float, y_clicked:Float)
@@ -81,4 +81,11 @@ class DashboardPicSelectViewModel(application: Application) : AndroidViewModel(a
             //The thing will crash
     //TO DO: Send to a database
     }
+    fun editTextReflectTrueName(picID: Int)
+    {
+        viewModelScope.launch {
+            _text.postValue( database.picturesDao().getNameForId(picID) ?: "empty")
+        }
+    }
+
 }
