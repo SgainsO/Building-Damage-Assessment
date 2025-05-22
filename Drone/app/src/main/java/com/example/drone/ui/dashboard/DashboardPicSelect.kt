@@ -26,13 +26,10 @@ class DashboardPicSelect : Fragment() {
 
     private var picID : Int = -1
     private var picRValue: Int = -1
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
     private val errorImage = R.drawable.error
 
     private lateinit var dashboardViewModel: DashboardPicSelectViewModel
-
 
     val drawableList : MutableList<Drawable?> = mutableListOf()
 
@@ -41,7 +38,6 @@ class DashboardPicSelect : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
 
         dashboardViewModel =
             ViewModelProvider(this).get(DashboardPicSelectViewModel::class.java)
@@ -53,7 +49,6 @@ class DashboardPicSelect : Fragment() {
         picRValue = arguments?.getInt("pictureNumber") ?: errorImage
 
         dashboardViewModel.editTextReflectTrueName(picID)
-
 
         binding.ImageHold.setImageResource(picRValue)
         drawableList.add(binding.ImageHold.drawable)
@@ -68,8 +63,14 @@ class DashboardPicSelect : Fragment() {
             override fun onTouch(view: View, motionEvent: MotionEvent): Boolean {
                 if (motionEvent.action == MotionEvent.ACTION_DOWN) {
                     view.performClick()
+                    dashboardViewModel.IdLastInServer = null
                     dashboardViewModel.SaveClicked(motionEvent.x, motionEvent.y)
+
+                    // Create and show alert with cancel listener
                     val alert = DashboardAlert()
+                    alert.setOnCancelListener {
+                        handleAlertCancelled()
+                    }
                     alert.show(parentFragmentManager, "Dash Alert")
 
                     val TopLeftX = binding.ImageHold.x
@@ -78,21 +79,11 @@ class DashboardPicSelect : Fragment() {
                     val overlay = ContextCompat.getDrawable(requireContext(), R.drawable.locationicon)
                     Log.d("ARROW", "ASSET POSITION: ${TopLeftX}, ${TopLeftY}" +
                             " MOTION EVENT: ${motionEvent.x}, ${motionEvent.y}")
-                    createNewIcon(motionEvent.x.toInt() -15, motionEvent.y.toInt() -30) //0,0 top left, 900 950 bottom right
-                    /*
-                     val overlayDrawable = InsetDrawable(overlay, 600, 450, 600, 450)
-                     //Motion event: 215, 200: top left corner
-                     //Motion event 1200, 213: top right corner
-                     //Motion event  215, 1200 Bottom Left corner
-                     //Motion event  1200, 215 Bottom right corner
-                     */
+                    createNewIcon(motionEvent.x.toInt() -15, motionEvent.y.toInt() -30)
                 }
-
-
 
                 return true
             }
-
         })
     }
 
@@ -102,6 +93,7 @@ class DashboardPicSelect : Fragment() {
         val newIcon = ImageView(requireContext())
         newIcon.setImageResource(R.drawable.locationicon)
         newIcon.id = View.generateViewId()
+        dashboardViewModel.IdLastInServer = newIcon.id
 
         val params = ConstraintLayout.LayoutParams(128,128)
         params.startToStart = ConstraintLayout.LayoutParams.PARENT_ID
@@ -110,6 +102,28 @@ class DashboardPicSelect : Fragment() {
         params.topMargin = y    // Y offset
 
         overlay.addView(newIcon, params)
+    }
+
+    // This function will be called when alert is cancelled (back button pressed)
+    private fun handleAlertCancelled() {
+        Log.d("DashboardAlert", "Alert was cancelled, removing icon")
+        deleteNewlyCreatedIcon()
+    }
+
+    fun deleteNewlyCreatedIcon(){
+        dashboardViewModel.cancelPinPressed()
+
+        // Fixed: Use binding.constraintOverlay.findViewById instead of just findViewById
+        dashboardViewModel.IdLastInServer?.let { iconId ->
+            val toRemove = binding.constraintOverlay.findViewById<ImageView>(iconId)
+            toRemove?.let {
+                binding.constraintOverlay.removeView(it)
+                Log.d("DashboardAlert", "Removed icon with ID: $iconId")
+            }
+        }
+
+        // Clear the ID after removal
+        dashboardViewModel.IdLastInServer = null
     }
 
     fun SetImageMarkers(LDraw : LayerDrawable) : LayerDrawable {

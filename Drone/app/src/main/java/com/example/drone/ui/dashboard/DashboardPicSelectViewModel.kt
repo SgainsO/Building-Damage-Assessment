@@ -6,6 +6,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import android.widget.ImageView
 import kotlinx.coroutines.launch
 
 class DashboardPicSelectViewModel(application: Application) : AndroidViewModel(application) {
@@ -23,6 +24,8 @@ class DashboardPicSelectViewModel(application: Application) : AndroidViewModel(a
 
     var currentPinNumber = 0
 
+    var IdLastInServer: Int? = null
+
     val text: LiveData<String> = _text
 
     fun resetPinNumber()
@@ -39,10 +42,12 @@ class DashboardPicSelectViewModel(application: Application) : AndroidViewModel(a
 
     fun SaveClicked(x_clicked: Float, y_clicked:Float)
     {
+        currentPinNumber += 1
         Log.d("INPUT","Tap On: ($x_clicked, $y_clicked)")
         LocationData["imageChord"] = listOf(x_clicked, y_clicked)
 
         viewModelScope.launch {
+            Log.d("pointID", "$currentPinNumber")
             val newPictureIntoData = PictureInfo(
                 currentPinNumber,
                 database.picturesDao().getIdForName(pictureName) ?: -1,
@@ -76,11 +81,16 @@ class DashboardPicSelectViewModel(application: Application) : AndroidViewModel(a
                 it.chordY = y
                 database.selectedDao().update(it)
             }
-            currentPinNumber += 1
         }
             //The thing will crash
     //TO DO: Send to a database
     }
+
+    fun cancelPinPressed()
+    {   //For when the cancel button is being pressed
+       // currentPinNumber -= 1
+    }
+
     fun editTextReflectTrueName(picID: Int)
     {
         viewModelScope.launch {

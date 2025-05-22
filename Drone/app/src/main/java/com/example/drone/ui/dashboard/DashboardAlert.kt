@@ -13,6 +13,11 @@ import com.example.drone.R
 class DashboardAlert : DialogFragment() {
 
     private lateinit var dashboardViewModel: DashboardPicSelectViewModel
+    private var onCancelCallback: (() -> Unit)? = null
+
+    fun setOnCancelListener(callback: () -> Unit) {
+        onCancelCallback = callback
+    }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity?.let {
@@ -23,7 +28,6 @@ class DashboardAlert : DialogFragment() {
             dashboardViewModel = ViewModelProvider(this).get(DashboardPicSelectViewModel::class.java)
 
             builder.setView(dialogView)
-                // Add action buttons.
                 .setPositiveButton("Enter",
                     DialogInterface.OnClickListener { dialog, id ->
 
@@ -38,13 +42,17 @@ class DashboardAlert : DialogFragment() {
                                 long?.text.toString().toFloat())
                         }
                     })
-                .setNegativeButton("Exit",
-                    DialogInterface.OnClickListener { dialog, id ->
-                        Log.d("Negative", "Negative registered")
-                    })
+                .setNegativeButton("Cancel") { dialog, _ ->
+                    onCancelCallback?.invoke()
+                    dialog.dismiss()
+                }
             builder.create()
         } ?: throw IllegalStateException("Activity cannot be null")
     }
 
-
+    override fun onCancel(dialog: DialogInterface) {
+        super.onCancel(dialog)
+        // This is called when back button is pressed
+        onCancelCallback?.invoke()
+    }
 }
