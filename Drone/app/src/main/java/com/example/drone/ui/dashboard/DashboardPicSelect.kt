@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -18,6 +19,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.findNavController
 import com.example.drone.R
 import com.example.drone.databinding.FragmentDashboardSelectBinding
 import kotlinx.coroutines.launch
@@ -78,6 +80,20 @@ class DashboardPicSelect : Fragment() {
 
 
         drawableList.add(binding.ImageHold.drawable)
+
+        binding.HomeBTN.setOnClickListener{
+            this.requireView().findNavController().navigate(
+                R.id.action_navigation_selector_to_navigation_dashboard)
+
+        }
+
+        requireActivity().getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                // Do nothing or handle manually
+            }
+        });
+
         return root
     }
 

@@ -82,7 +82,7 @@ interface SelectedDao {
 
 }
 
-@Database(entities = [Pictures::class, PictureInfo::class], version = 3)
+@Database(entities = [Pictures::class, PictureInfo::class], version = 1)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun picturesDao(): PicturesDao
     abstract fun selectedDao(): SelectedDao
