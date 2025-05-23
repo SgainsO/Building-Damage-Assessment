@@ -36,6 +36,9 @@ class DashboardPicSelectViewModel(application: Application) : AndroidViewModel(a
 
     val text: LiveData<String> = _text
 
+    val pins: MutableLiveData<List<PictureInfo>?> = MutableLiveData()
+
+
     var picId: Int = -1
     //To Do, make a function that will allow the frontend to populate this value at stand by
 
@@ -91,6 +94,12 @@ class DashboardPicSelectViewModel(application: Application) : AndroidViewModel(a
         //The thing will crash
         //TO DO: Send to a database
     }
+
+    fun updatePicLivedata() : LiveData<List<PictureInfo>>
+    {
+        return database.selectedDao().getAllIconLocations(picId)
+    }
+
 
     fun cancelPinPressed()
     {   //For when the cancel button is being pressed

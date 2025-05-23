@@ -14,6 +14,8 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.example.drone.R
@@ -28,6 +30,7 @@ class DashboardPicSelect : Fragment() {
     private var picRValue: Int = -1
     private val binding get() = _binding!!
     private val errorImage = R.drawable.error
+    private var livePins : LiveData<List<PictureInfo>>? = null
 
     private lateinit var dashboardViewModel: DashboardPicSelectViewModel
 
@@ -43,14 +46,37 @@ class DashboardPicSelect : Fragment() {
             ViewModelProvider(this).get(DashboardPicSelectViewModel::class.java)
         dashboardViewModel.pictureName = "ToTest"
         _binding = FragmentDashboardSelectBinding.inflate(inflater, container, false)
+        dashboardViewModel.editTextReflectTrueName(picID)
+        //Set up the dashboard view model
+
         val root: View = binding.root
 
         picID = arguments?.getInt("imageId") ?: -1
         picRValue = arguments?.getInt("pictureNumber") ?: errorImage
 
-        dashboardViewModel.editTextReflectTrueName(picID)
-
+        //works using the given pic number
         binding.ImageHold.setImageResource(picRValue)
+
+        val pinObserver = Observer<List<PictureInfo>?> { pins ->
+            Log.d("CHECK REACHED", "PIN OBSERVER IS WORKING")
+            if (pins != null) {
+                for (pin in pins!!) {
+                    if (pin.onPicX == null || pin.onPicY == null) {
+                        Log.d("ERROR NULL", "A Choordinate was null, can not be shown")
+                    } else {
+                        createNewIcon(
+                            pin.onPicX!!.toInt(), pin.onPicY!!.toInt()
+                        )
+                    }
+                }
+            }
+        }
+
+        dashboardViewModel.updatePicLivedata().observe(viewLifecycleOwner, pinObserver)
+        //make the observer here
+        //once observer is linked a change can be found
+
+
         drawableList.add(binding.ImageHold.drawable)
         return root
     }
@@ -79,7 +105,7 @@ class DashboardPicSelect : Fragment() {
                     val overlay = ContextCompat.getDrawable(requireContext(), R.drawable.locationicon)
                     Log.d("ARROW", "ASSET POSITION: ${TopLeftX}, ${TopLeftY}" +
                             " MOTION EVENT: ${motionEvent.x}, ${motionEvent.y}")
-                    createNewIcon(motionEvent.x.toInt() -15, motionEvent.y.toInt() -30)
+    //                createNewIcon(motionEvent.x.toInt() -15, motionEvent.y.toInt() -30)
                 }
 
                 return true
@@ -126,7 +152,7 @@ class DashboardPicSelect : Fragment() {
         dashboardViewModel.IdLastInServer = null
     }
 
-    fun SetImageMarkers(LDraw : LayerDrawable) : LayerDrawable {
+    fun SetImageMarkersOnStart(LDraw : LayerDrawable) : LayerDrawable {
         val lArr = dashboardViewModel.LocationInfoArray
         for (i in 0 until drawableList.size - 1)
         {

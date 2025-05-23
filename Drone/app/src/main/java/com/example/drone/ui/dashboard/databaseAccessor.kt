@@ -62,11 +62,11 @@ interface SelectedDao {
     suspend fun delete(p: PictureInfo)
 
     @Query("""
-        SELECT SelectedPins.* FROM SelectedPins 
-        INNER JOIN Pictures ON SelectedPins.picNumber = Pictures.picNumber 
-        WHERE Pictures.picNumber = :picNum
+        SELECT SelectedPins.* FROM SelectedPins
+        WHERE SelectedPins.picNumber = :picNum
     """)
     fun getAllIconLocations(picNum: Int): LiveData<List<PictureInfo>>
+
     @Query("""
         SELECT * FROM SelectedPins WHERE picNumber = :picNum AND pinNumber = :pinNum
     """)
@@ -77,9 +77,12 @@ interface SelectedDao {
     """)
     suspend fun GetMaxPin(picNum: Int) : Int
 
+    @Query("SELECT * FROM SelectedPins")
+    fun getAll(): LiveData<List<PictureInfo>>
+
 }
 
-@Database(entities = [Pictures::class, PictureInfo::class], version = 2)
+@Database(entities = [Pictures::class, PictureInfo::class], version = 3)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun picturesDao(): PicturesDao
     abstract fun selectedDao(): SelectedDao
