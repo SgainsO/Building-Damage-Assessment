@@ -87,13 +87,6 @@ class DashboardPicSelect : Fragment() {
 
         }
 
-        requireActivity().getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
-            @Override
-            public void handleOnBackPressed() {
-                // Do nothing or handle manually
-            }
-        });
-
         return root
     }
 
