@@ -1,5 +1,5 @@
 <img src="https://www.worldatlas.com/img/flag/ua-flag.jpg" width="100%" height="180" />
-
+*Further development will be continued in private*
 # Welcome to Our Project!
 
 ## Our Motivation
